@@ -1,10 +1,17 @@
 ---
 deployment:
   tasks:
+    - export NODE_ENV=production
     - export DEPLOYPATH=/home/etestdesignshor/linehaul.designshoretest.com
+
+    - echo "Entering frontend directory..."
+    - cd frontend
+
     - echo "Installing dependencies..."
     - npm install
-    - echo "Building React project..."
+
+    - echo "Building Vite app..."
     - npm run build
-    - echo "Deploying build folder..."
-    - /bin/rsync -a --delete build/ $DEPLOYPATH/
+
+    - echo "Deploying dist folder to subdomain root..."
+    - /bin/rsync -a --delete dist/ $DEPLOYPATH/
