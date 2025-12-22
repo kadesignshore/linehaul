@@ -1,0 +1,10 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/etestdesignshor/linehaul.designshoretest.com
+    - echo "Installing dependencies..."
+    - npm install
+    - echo "Building React project..."
+    - npm run build
+    - echo "Deploying build folder..."
+    - /bin/rsync -a --delete build/ $DEPLOYPATH/
