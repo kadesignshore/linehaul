@@ -1,0 +1,41 @@
+# Node.js dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# Environment variables
+.env
+.env.*
+
+# Build outputs
+dist/
+build/
+out/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+
+# Git files
+*.orig
+*.rej
+
+# Upload files
+uploads/
