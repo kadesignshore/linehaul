@@ -129,3 +129,18 @@ exports.deleteEntry = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+/**
+ * GET /areas/:id/entries
+ */
+exports.getAreaEntries = async (req, res) => {
+  try {
+    const area = await areaService.getAreaById(req.params.id);
+    if (!area) {
+      return res.status(404).json({ message: "Area not found" });
+    } 
+    res.json(area.entries);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

@@ -131,3 +131,10 @@ exports.deleteEntry = async (areaId, entryId) => {
   await area.save();
   return await deletedentry;
 };
+
+/**
+ * GET /:id/entries
+ */
+exports.getAreaById = async (areaId) => {
+  return await Area.findById(areaId);
+};

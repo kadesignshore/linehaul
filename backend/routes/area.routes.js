@@ -17,6 +17,7 @@ router.get("/my", requireAuth, areaController.getMyAreas);
 
 
 // Entry routes
+router.get("/:id/entries", requireAuth, areaController.getAreaEntries); // get entries by area id
 router.post("/:id/entry", requireAuth, areaController.createEntry);
 router.post("/entries", requireAuth, areaController.createEntriesBulk);
 router.delete("/:areaId/entries/:entryId", requireAuth, areaController.deleteEntry);
