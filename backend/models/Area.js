@@ -2,15 +2,68 @@ const mongoose = require("mongoose");
 
 const entrySchema = new mongoose.Schema(
   {
-    truck: String,
-    rego: String,
-    driver_name: String,
-    trailer: String,
-    start_time: String, // "04:40"
-    instructions: String,
-    boat: String,
-    load: String,
-    plan_date: Date
+    truck: {
+      type: String,
+      required: true,
+      trim: true,
+      minlength: 1,
+    },
+    rego: {
+      type: String,
+      required: true,
+      trim: true,
+      minlength: 1,
+    },
+    driver_name: {
+      type: String,
+      required: true,
+      trim: true,
+      minlength: 1,
+    },
+    trailer: {
+      type: String,
+      trim: true,
+      minlength: 1,
+    },
+    start_time: {
+      type: String,
+      required: true,
+    },
+    instructions: {
+      type: String,
+      trim: true,
+      minlength: 1,
+    },
+    boat: {
+      type: String,
+      required: true,
+      trim: true,
+      minlength: 1,
+    },
+    load: {
+      type: String,
+      required: true,
+      trim: true,
+      minlength: 1,
+    },
+    plan_date: {
+      type: Date,
+      required: true,
+    },
+    status: {
+      type: String,
+      enum: ["pending", "in_progress", "completed"],
+      default: "pending",
+    },
+    transportation_issue: {
+      type: Boolean,
+      default: false,
+    },
+    issueNote: {
+      type: String,
+      trim: true,
+      minlength: 1,
+    },
   },
   { _id: true }
 );

@@ -35,6 +35,43 @@ exports.getAllAreas = async () => {
 };
 
 /**
+ * Admin: get all areas summary
+ */
+exports.getAllAreaSummary = async () => {
+  return await Area.aggregate([
+    {
+      $project: {
+        city: "$name",
+
+        total: {
+          $size: "$entries"
+        },
+
+        completed: {
+          $size: {
+            $filter: {
+              input: "$entries",
+              as: "entry",
+              cond: { $eq: ["$$entry.status", "completed"] }
+            }
+          }
+        },
+
+        transportIssues: {
+          $size: {
+             $filter: {
+                input: "$entries",
+                as: "entry",
+                cond: { $eq: ["$$entry.transportation_issue", true] }
+              }
+          }
+        }
+      }
+    }
+  ]);
+};
+
+/**
  * Driver: get assigned areas
  */
 exports.getDriverAreas = async (driverId) => {
@@ -50,17 +87,20 @@ exports.deleteArea = async (areaId) => {
 };
 
 /**
- * Driver: create entries for area
+ * create a single entry for area
  */
 exports.createEntry = async (areaId, entryData) => {
-  console.log("Creating entry:", areaId, entryData.entry);
-  const area = await Area.findById(areaId);
-  if (!area) {
+  const result = await Area.updateOne(
+    { _id: areaId },
+    { $push: { entries: entryData.entry }},
+    { runValidators: true}
+  );
+
+  if(result.modifiedCount === 0){
     throw new Error("Area not found");
   }
-  await area.entries.push(entryData.entry);
-  
-  return await area.save();
+
+  return { success: true };
 }
 
 
@@ -75,6 +115,32 @@ exports.updateEntries = async (areaId, entries) => {
   );
 };
 
+// update a single entru
+exports.updateEntry = async (areaId, entryId, entryData) => {
+ const result = await Area.updateOne(
+  {
+    _id: areaId,
+    "entries._id": entryId,
+  },
+  {
+    $set: Object.fromEntries(
+      Object.entries(entryData).map(([key,value]) => [
+        `entries.$.${key}`,
+        value,
+      ])
+    )
+  },
+  {
+    runValidators: true
+  }
+ )
+
+ if(result.matchedCount === 0){
+  throw new Error("Area or Entry not found");
+ }
+
+ return { success: true };
+};
 
 exports.createEntriesBulk = async (areaId, entries, user) => {
   console.log("Creating entries bulk:", areaId, entries, user);
@@ -122,19 +188,30 @@ exports.createEntriesBulk = async (areaId, entries, user) => {
 };
 
 
-exports.deleteEntry = async (areaId, entryId) => { 
-  const area = await Area.findById(areaId);
-  if (!area) {
-    throw new Error("Area not found");
+exports.deleteEntry = async (areaId, entryId) => {
+  const result = await Area.updateOne(
+    { _id: areaId },
+    { $pull: { entries: { _id: entryId } } }
+  );
+
+  if (result.modifiedCount === 0) {
+    throw new Error("Entry not found");
   }
-  const deletedentry = await area.entries.id(entryId).deleteOne();
-  await area.save();
-  return await deletedentry;
+
+  return { success: true };
 };
+
 
 /**
  * GET /:id/entries
  */
 exports.getAreaById = async (areaId) => {
   return await Area.findById(areaId);
+};
+
+/** GET all entries
+ */
+exports.getAllEntries = async () => {
+  const areas = await Area.find({}, { entries: 1, _id: 0 });
+  return areas.flatMap(area => area.entries);
 };

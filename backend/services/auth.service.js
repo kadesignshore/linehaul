@@ -22,6 +22,11 @@ exports.register = async (data) => {
   return { user, token };
 };
 
+exports.registerDriver = async (data) => {
+  data.role = "driver";
+  return await this.register(data);
+}
+
 exports.login = async (username, password) => {
   console.log(username, password);
   const user = await User.findOne({
@@ -41,4 +46,19 @@ exports.login = async (username, password) => {
   const token = signToken(user);
 
   return { user, token };
+};
+
+exports.logout = async (userId) => {
+  // For JWT, logout is typically handled on the client side by deleting the token.
+  // However, if you want to implement server-side logout (e.g., token blacklisting),
+  // you would add the token to a blacklist here.
+
+
+
+  return;
+}
+
+exports.getAllDrivers = async () => {
+  const drivers = await User.find({ role: "driver" }).select('-password');
+  return drivers;
 };

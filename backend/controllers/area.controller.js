@@ -37,6 +37,16 @@ exports.getAllAreas = async (req, res) => {
   }
 };
 
+// Get all areas summary
+exports.getAllAreaSummary = async (req, res) => {
+  try {
+    const summary = await areaService.getAllAreaSummary();
+    res.json(summary);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 /**
  * DELETE /areas/:id
  */
@@ -89,6 +99,18 @@ exports.updateEntries = async (req, res) => {
   }
 };
 
+// update a single entry
+exports.updateEntry = async (req, res) => {
+  try {
+    const { areaId, entryId } = req.params;
+    const { entry } = req.body;
+    const area = await areaService.updateEntry(areaId, entryId, entry);
+    res.json(area);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 
 exports.createEntriesBulk = async (req, res) => {
   try {
@@ -125,6 +147,18 @@ exports.deleteEntry = async (req, res) => {
       message: "Entry deleted successfully",
       area
     });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+/**
+ * GET all entries
+ */
+exports.getAllEntries = async (req, res) => {
+  try {
+    const entries = await areaService.getAllEntries();
+    res.json(entries);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

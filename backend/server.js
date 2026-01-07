@@ -15,7 +15,7 @@ const PORT = process.env.PORT;
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://localhost:3000','http://localhost:5173'],
+  origin: ['http://localhost:3000', 'https://localhost:3000','http://localhost:5173','https://linehaul-app.vercel.app'],
   credentials: true,
 }));
 
@@ -39,6 +39,9 @@ connectDB()
 // Routes
 app.get('/api/health', (req, res) => {
     res.status(200).json({ message: 'Backend is running smoothly !' });
+});
+app.get('/sashi', (req, res) => {
+    res.status(200).json({ message: 'this is sashi message' });
 });
 
 // serve area route

@@ -19,6 +19,26 @@ exports.register = async (req, res) => {
   }
 };
 
+exports.registerDriver = async (req, res) => {
+  try {
+    const data = { ...req.body, role: "driver" };
+    const { user, token } = await authService.registerDriver(data);
+
+    res.status(201).json({
+      message: "Driver registered successfully",
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+      }
+    });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
+
 exports.login = async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -44,3 +64,21 @@ exports.login = async (req, res) => {
   }
 };
 
+
+exports.logout = async (req, res) => {
+  try {
+      // await authService.logout(req.user.id);
+    res.json({ message: "Logged out successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.getAllDrivers = async (req, res) => {
+  try {
+    const drivers = await authService.getAllDrivers();
+    res.json(drivers);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

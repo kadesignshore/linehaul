@@ -12,6 +12,10 @@ const userSchema = new mongoose.Schema(
       default: "driver"
     },
 
+    phone: { type: String, default:'' },
+    license_number: { type: String },
+    
+
     is_active: { type: Boolean, default: true }
   },
   { timestamps: true }
