@@ -9,9 +9,9 @@ const { requireAuth, requireAdmin } = require("../middlewares/auth.middleware");
 router.post("/", requireAuth, requireAdmin, areaController.createArea);
 router.get("/", requireAuth, requireAdmin, areaController.getAllAreas);
 router.get("/summary", areaController.getAllAreaSummary);
+router.get("/:id", requireAuth, areaController.getAreaById);
 router.patch("/:id/assign-driver", requireAuth, requireAdmin, areaController.assignDriver);
 router.delete("/:id", requireAuth, requireAdmin, areaController.deleteArea);
-
 router.get("/my", requireAuth, areaController.getMyAreas);
 
 

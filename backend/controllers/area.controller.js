@@ -48,6 +48,21 @@ exports.getAllAreaSummary = async (req, res) => {
 };
 
 /**
+ * GET /areas/:id
+ */
+exports.getAreaById = async (req, res) => {
+  try {
+    const area = await areaService.getAreaById(req.params.id);
+    if (!area) {
+      return res.status(404).json({ message: "Area not found" });
+    }
+    res.json(area);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+/**
  * DELETE /areas/:id
  */
 exports.deleteArea = async (req, res) => {
@@ -157,6 +172,7 @@ exports.deleteEntry = async (req, res) => {
  */
 exports.getAllEntries = async (req, res) => {
   try {
+    await new Promise(resolve => setTimeout(resolve, 8000));
     const entries = await areaService.getAllEntries();
     res.json(entries);
   } catch (err) {

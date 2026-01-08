@@ -71,6 +71,8 @@ exports.getAllAreaSummary = async () => {
   ]);
 };
 
+
+
 /**
  * Driver: get assigned areas
  */
@@ -90,6 +92,7 @@ exports.deleteArea = async (areaId) => {
  * create a single entry for area
  */
 exports.createEntry = async (areaId, entryData) => {
+  console.log("Creating entry:", areaId, entryData);
   const result = await Area.updateOne(
     { _id: areaId },
     { $push: { entries: entryData.entry }},
@@ -206,7 +209,18 @@ exports.deleteEntry = async (areaId, entryId) => {
  * GET /:id/entries
  */
 exports.getAreaById = async (areaId) => {
-  return await Area.findById(areaId);
+  const area = await Area.findById(areaId)
+    .populate("created_by", "name role")
+    .populate({
+      path: "entries",
+      populate: {
+        path: "driver",
+        model: "User",
+        select: "name phone role email"
+      }
+    });
+
+    return area
 };
 
 /** GET all entries
