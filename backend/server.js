@@ -3,8 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const connectDB = require('./config/db');
 const dotenv = require('dotenv');
-const authRoutes = require('./routes/auth.routes');
-const areaRoutes = require('./routes/area.routes');
+const { driverRoutes, areaRoutes, authRoutes } = require('./routes');
 const path = require('path');
 
 dotenv.config();
@@ -40,12 +39,11 @@ connectDB()
 app.get('/api/health', (req, res) => {
     res.status(200).json({ message: 'Backend is running smoothly !' });
 });
-app.get('/sashi', (req, res) => {
-    res.status(200).json({ message: 'this is sashi message' });
-});
 
 // serve area route
 app.use('/api/areas', areaRoutes);
+
+app.use('/api/drivers', driverRoutes);
 
 // Global error handler (place this AFTER all routes/middleware)
 app.use((err, req, res, next) => {

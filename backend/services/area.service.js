@@ -38,13 +38,30 @@ exports.getAllAreas = async () => {
  * Admin: get all areas summary
  */
 exports.getAllAreaSummary = async () => {
+  const startOfDay = new Date();
+  startOfDay.setHours(0, 0, 0, 0);
+
+  const endOfDay = new Date();
+  endOfDay.setHours(23, 59, 59, 999);
+
   return await Area.aggregate([
     {
       $project: {
         city: "$name",
 
         total: {
-          $size: "$entries"
+          $size: {
+            $filter: {
+              input: "$entries",
+              as: "entry",
+              cond: {
+                $and: [
+                  { $gte: ["$$entry.plan_date", startOfDay] },
+                  { $lte: ["$$entry.plan_date", endOfDay] }
+                ]
+              }
+            }
+          }
         },
 
         completed: {

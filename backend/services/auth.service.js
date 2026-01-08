@@ -35,7 +35,8 @@ exports.login = async (username, password) => {
   const user = await User.findOne({
     $or: [
       { email: username.toLowerCase() },
-      { name: username.toLowerCase() }
+      { username: username.toLowerCase() },
+      { name: username.toLowerCase() },
     ]
   });
 
