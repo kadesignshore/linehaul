@@ -12,8 +12,8 @@ const entrySchema = new mongoose.Schema(
     load: { type: String, required: false, trim: true },
     plan_date: { type: Date, required: true, },
     status: { type: String, enum: ["pending", "in_progress", "completed"], default: "pending", },
-    transportation_issue: { type: Boolean, default: false, },
-    issueNote: { type: String, trim: true },
+    is_transportation_issue: { type: Boolean, default: false, },
+    transportation_issue: { type: String, trim: true },
     driver: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: false },
   },
   { _id: true }

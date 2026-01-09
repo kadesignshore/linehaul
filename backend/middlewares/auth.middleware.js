@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const { request } = require("express");
 
 const JWT_SECRET = process.env.JWT_SECRET || "supersecret";
 
@@ -31,3 +32,20 @@ exports.requireAdmin = (req, res, next) => {
   }
   next();
 };
+
+exports.checkDriver = (req, res, next) => {
+  if (req.user.role !== "driver") {
+    return res.status(403).json({ message: "Driver only" });
+  }
+  next();
+};
+
+// check if he is requesting his own data
+exports.checkSelf = (req, res, next) => {
+  const userId = req.user._id.toString();
+  if (userId !== req.params.driverId) {
+    return res.status(403).json({ message: "Access denied" });
+  }
+  next();
+};
+

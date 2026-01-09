@@ -79,7 +79,7 @@ exports.getAllAreaSummary = async () => {
              $filter: {
                 input: "$entries",
                 as: "entry",
-                cond: { $eq: ["$$entry.transportation_issue", true] }
+                cond: { $eq: ["$$entry.is_transportation_issue", true] }
               }
           }
         }

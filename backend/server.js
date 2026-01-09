@@ -43,7 +43,7 @@ app.get('/api/health', (req, res) => {
 // serve area route
 app.use('/api/areas', areaRoutes);
 
-app.use('/api/drivers', driverRoutes);
+app.use('/api/driver', driverRoutes);
 
 // Global error handler (place this AFTER all routes/middleware)
 app.use((err, req, res, next) => {
