@@ -43,6 +43,7 @@ exports.checkDriver = (req, res, next) => {
 // check if he is requesting his own data
 exports.checkSelf = (req, res, next) => {
   const userId = req.user._id.toString();
+  console.log("This is a userid and driverid",userId,req.params.driverId)
   if (userId !== req.params.driverId) {
     return res.status(403).json({ message: "Access denied" });
   }

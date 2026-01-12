@@ -28,11 +28,45 @@ exports.driverGetDriverEntries = async (driverId) => {
 }
 
 exports.updateStatusDriverEntry = async (driverId, entryId, status) => {
-    const result = await Area.findOneAndUpdate(
-        { "entries._id": entryId, "entries.driver": driverId },
-        { $set: { "entries.$.status": status } },
-        { new: true }
-    );
+  return Area.findOneAndUpdate(
+    { "entries._id": entryId },
+    {
+      $set: {
+        "entries.$[entry].status": status
+      }
+    },
+    {
+      arrayFilters: [
+        {
+          "entry._id": entryId,
+          "entry.driver": driverId
+        }
+      ],
+      new: true
+    }
+  );
+};
 
-    return result;
+exports.updateIssueDriverEntry = async (driverId, entryId, issue) => {
+
+  console.log("createing Issue",entryId, issue)
+  return Area.findOneAndUpdate(
+    { "entries._id":entryId },
+    {
+      $set: {
+        "entries.$[entry].is_transportation_issue": true,
+        "entries.$[entry].issue_type": issue.issueType,
+        "entries.$[entry].transportation_issue": issue.message
+      }
+    },
+    {
+      arrayFilters: [
+        {
+          "entry._id": entryId,
+          "entry.driver": driverId
+        }
+      ],
+      new: true
+    }
+  );
 }

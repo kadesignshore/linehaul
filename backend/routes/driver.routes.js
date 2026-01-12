@@ -7,5 +7,6 @@ const { requireAuth, requireAdmin, checkSelf } = require("../middlewares/auth.mi
 // get entry based on only the driver
 router.get("/:driverId/entries", requireAuth, checkSelf, driverController.getDriverEntries);
 router.post("/:driverId/entries/:entryId/status", requireAuth, checkSelf, driverController.updateStatusDriverEntry);
+router.post("/:driverId/entries/:entryId/issue", requireAuth, checkSelf, driverController.updateIssueDriverEntry);
 
 module.exports = router;

@@ -3,13 +3,17 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const connectDB = require('./config/db');
 const dotenv = require('dotenv');
-const { driverRoutes, areaRoutes, authRoutes } = require('./routes');
+const { driverRoutes, areaRoutes, authRoutes, sseRoutes } = require('./routes');
 const path = require('path');
+// const { initSockets } = require("./sockets");
+
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT;
+
+
 
 // Middleware
 app.use(express.json());
@@ -21,13 +25,20 @@ app.use(cors({
 // Use the auth routes for agent login
 app.use('/api/auth', authRoutes);
 
+// Use the sse for updates
+app.use("/api/sse", sseRoutes.sseRouter);
+
 
 // Database connection
 connectDB()
   .then(() => {
-    // Only start the server if the DB is connected successfully
-    app.listen(PORT, () => {
-      console.log(`Server is running on http://localhost:${PORT}`);
+    const server = require("http").createServer(app);
+
+    // Initialize Socket.IO
+    // initSockets(server);
+
+    server.listen(PORT, () => {
+      console.log(`Server running on http://localhost:${PORT}`);
     });
   })
   .catch((err) => {
